@@ -1,10 +1,8 @@
 library(dplyr)
 
-ebs = read.table("C:/Users/maslakovaaa/Documents/progr/gene_target/GeneTarget-main/recognition/ein3_4h_peak_after_vp.txt", 
-                   header = T, sep = "\t", stringsAsFactors = FALSE)
+ebs = read.table("ein3_peak_SFMotif.txt", header = T, sep = "\t", stringsAsFactors = FALSE)
 
-genes = read.table("C:/Users/maslakovaaa/Documents/progr/motif recognition/arabidopsis_promoters_coordinates.txt", 
-                   header = F, sep = "\t", stringsAsFactors = FALSE)
+genes = read.table("arabidopsis_promoters_coordinates.txt", header = F, sep = "\t", stringsAsFactors = FALSE)
 
 int_genes <- intersect(genes$V4, ebs$gene)
 
@@ -30,5 +28,4 @@ for (num in 1:nrow(ebs)) {
 
 ebs <- subset(ebs, prom == 'pr500')
 
-write.table(ebs, file = "C:/Users/maslakovaaa/Documents/progr/gene_target/GeneTarget-main/gene target_motif recognition/ein3_peak_after_vp_pr500-1500.txt", 
-            append = FALSE, quote = FALSE, row.names = FALSE, col.names = T, sep = '\t')
+write.table(ebs, file = "ein3_peak_SFMotif_500bp.txt", append = FALSE, quote = FALSE, row.names = FALSE, col.names = T, sep = '\t')
