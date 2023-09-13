@@ -1,0 +1,34 @@
+library(dplyr)
+
+ebs = read.table("C:/Users/maslakovaaa/Documents/progr/gene_target/GeneTarget-main/recognition/ein3_4h_peak_after_vp.txt", 
+                   header = T, sep = "\t", stringsAsFactors = FALSE)
+
+genes = read.table("C:/Users/maslakovaaa/Documents/progr/motif recognition/arabidopsis_promoters_coordinates.txt", 
+                   header = F, sep = "\t", stringsAsFactors = FALSE)
+
+int_genes <- intersect(genes$V4, ebs$gene)
+
+coord_genes <- genes[genes$V4 %in% int_genes,]
+
+ebs$prom <- 'NA'
+
+for (num in 1:nrow(ebs)) {
+  coord <- coord_genes[coord_genes$V4 == ebs$gene[num],]   
+  if (coord$V5 == '+') {
+    c_500 = coord$V3 - 500
+    if (c_500 < ebs$absolute_motif_start[num]) {
+      ebs$prom[num] <- 'pr500'
+    } else {ebs$prom[num] <- 'pr1500'}
+  }
+  if (coord$V5 == '-') {
+    c_500 = coord$V2 + 500
+    if (c_500 > ebs$absolute_motif_end[num]) {
+      ebs$prom[num] <- 'pr500'
+    } else {ebs$prom[num] <- 'pr1500'}
+  }
+} 
+
+ebs <- subset(ebs, prom == 'pr500')
+
+write.table(ebs, file = "C:/Users/maslakovaaa/Documents/progr/gene_target/GeneTarget-main/gene target_motif recognition/ein3_peak_after_vp_pr500-1500.txt", 
+            append = FALSE, quote = FALSE, row.names = FALSE, col.names = T, sep = '\t')
